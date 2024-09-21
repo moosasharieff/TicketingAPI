@@ -20,6 +20,8 @@ jobs:
 
       - name: Checkout Git
         uses: actions/checkout@v2
+      - name: Waiting for DB # Fixing race condition with other services
+        run: docker compose run --rm app /bin/sh -c "python3 manage.py wait_for_db"
       - name: Testing
         run: docker compose run --rm app /bin/sh -c "python3 manage.py test"
       - name: Linting
